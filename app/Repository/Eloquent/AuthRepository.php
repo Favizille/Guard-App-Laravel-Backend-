@@ -27,6 +27,7 @@ class AuthRepository extends BaseRepository{
         return [
             "status" => $this->isSuccessful(),
             "user" => $user,
+            'token' => $user->createToken('myapptoken')->plainTextToken,
         ];
     }
 
@@ -47,6 +48,7 @@ class AuthRepository extends BaseRepository{
         return [
             "status" => $this->isSuccessful(),
             "user" => auth()->user(),
+            'token' => auth()->user()->createToken('myapptoken')->plainTextToken,
         ];
     }
 }
