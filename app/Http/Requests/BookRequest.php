@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BookRequest extends FormRequest
@@ -13,7 +13,7 @@ class BookRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user();
+        return true;
     }
 
     /**
@@ -24,7 +24,13 @@ class BookRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "visitee" => "required",
+            "destination" => "required",
+            "purpose" => "required",
+            "phone_number" => "required",
+            "duration" => "required",
+            "guardian" => "required",
+            "answer" => "required" ,
         ];
     }
 }

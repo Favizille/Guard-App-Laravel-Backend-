@@ -11,4 +11,11 @@ class BaseRepository{
     public function isUnsuccessful(){
         return false;
     }
+
+    public function failResponse($message){
+        return [
+            "status" => "fail",
+            "message" => $message,
+        ];
+    }
 }

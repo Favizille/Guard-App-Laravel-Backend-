@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +20,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::post("/register", [AuthController::class, "register"]);
-Route::post("login", [AuthController::class, "login"]);
+Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"]);
+
+Route::post("/book", [BookingController::class, "create"]);
 
 // i) name of visitee(someone who is visited you)
 // ii) Destination
