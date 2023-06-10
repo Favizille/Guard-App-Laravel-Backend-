@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"]);
+
+Route::put("/updateProfile", [UserController::class, "updateProfile"]);
 
 Route::post("/book", [BookingController::class, "create"]);
 
@@ -53,3 +56,10 @@ Route::post("/book", [BookingController::class, "create"]);
 // 6. State of residence
 // 7. Date of birth
 // 8. Image (compulsory)
+
+
+//TO DO
+// Profile
+// verify email on registration notification
+// forgot password
+// book CRUD
