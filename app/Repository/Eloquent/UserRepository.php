@@ -14,8 +14,12 @@ class UserRepository extends BaseRepository{
         $this->profile = $profile;
     }
 
-    public function updateProfile($request)
-    {
+    public function updateProfile($data){
 
+        return [
+            "status" => $this->isSuccessful(),
+            "message" => "Profile updated successfully",
+            "data" => $this->profile->update($data)
+        ];
     }
 }
