@@ -13,7 +13,7 @@ class ProfileRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user();
+        return true;
     }
 
     /**
@@ -32,7 +32,7 @@ class ProfileRequest extends FormRequest
             "state_of_origin" => "required",
             "state_of_residence" => "required",
             "date_of_birth" => "required",
-            "image" => "required",
+            // "image" => "required",
         ];
     }
 }

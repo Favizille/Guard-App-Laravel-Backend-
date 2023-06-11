@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string("state_of_origin");
             $table->string("state_of_residence");
             $table->string("date_of_birth");
-            $table->file("image");
+            // $table->string("image");
             $table->timestamps();
         });
     }
