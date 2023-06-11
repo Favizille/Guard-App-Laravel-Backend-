@@ -16,10 +16,20 @@ class UserRepository extends BaseRepository{
 
     public function updateProfile($data){
 
-        return [
-            "status" => $this->isSuccessful(),
-            "message" => "Profile updated successfully",
-            "data" => $this->profile->update($data)
-        ];
+        var_export(auth()->user());
+
+        // $user->update([
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'updated_at' => now()
+        // ]);
+
+        var_export($data);
+
+        // return [
+        //     "status" => $this->isSuccessful(),
+        //     "message" => "Profile updated successfully",
+        //     "data" => $this->profile->update($data)
+        // ];
     }
 }
