@@ -14,22 +14,35 @@ class UserRepository extends BaseRepository{
         $this->profile = $profile;
     }
 
+    public function createProfile($data){
+
+        $data["user_id"] = auth()->user()->id;
+
+        return [
+            "status" => $this->isSuccessful(),
+            "message" => "Profile updated successfully",
+            "data" => $this->profile->create($data)
+        ];
+    }
+
     public function updateProfile($data){
 
-        var_export(auth()->user());
+        if(!auth()->user()->profile->update($data)){
+            return [
+                "status" => $this->isUnsuccessful(),
+                "message" => "Profile update failed"
+            ];
+        }
 
-        // $user->update([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'updated_at' => now()
-        // ]);
+        return [
+            "status" => auth()->user()->profile->update($data),
+            "message" => "Profile updated successfully",
+            "data" =>$data
+        ];
+    }
 
-        var_export($data);
-
-        // return [
-        //     "status" => $this->isSuccessful(),
-        //     "message" => "Profile updated successfully",
-        //     "data" => $this->profile->update($data)
-        // ];
+    public function getProfile()
+    {
+        return auth()->user()->profile;
     }
 }

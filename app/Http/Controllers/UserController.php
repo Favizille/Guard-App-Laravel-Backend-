@@ -16,9 +16,18 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function updateProfile(ProfileRequest $request){
-        $updateProfielResponse = $this->userRepository->updateProfile($request->validated());
+    public function createProfile(ProfileRequest $request)
+    {
+        return $this->userRepository->createProfile($request->validated());;
+    }
+    
+    public function updateProfile(ProfileRequest $request)
+    {
+        return $this->userRepository->updateProfile($request->validated());;
+    }
 
-        return $updateProfielResponse;
+    public function getProfile()
+    {
+        return $this->userRepository->getProfile();
     }
 }

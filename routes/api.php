@@ -25,7 +25,13 @@ Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"]);
 
-Route::put("/updateProfile", [UserController::class, "updateProfile"]);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post("/createProfile", [UserController::class, "createProfile"]);
+    Route::put("/updateProfile", [UserController::class, "updateProfile"]);
+    Route::get("/profile", [UserController::class, "getProfile"]);
+});
+
+// Route::put("/updateProfile", [UserController::class, "updateProfile"]);
 
 Route::post("/book", [BookingController::class, "create"]);
 
