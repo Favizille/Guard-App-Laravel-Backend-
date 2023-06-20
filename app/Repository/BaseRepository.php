@@ -12,10 +12,10 @@ class BaseRepository{
         return false;
     }
 
-    public function failResponse($message){
+    public function failResponse(){
         return [
-            "status" => "fail",
-            "message" => $message,
+            "status" => "false",
+            "message" => "failed",
         ];
     }
 }

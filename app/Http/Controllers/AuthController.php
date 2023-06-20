@@ -28,6 +28,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request){
         $registerResponse = $this->authRepository->register($request->validated());
 
+
         return $registerResponse;
     }
 
@@ -43,5 +44,17 @@ class AuthController extends Controller
         "status" => "success",
         "data" => Auth::logout(),
        ];
+    }
+
+    public function requestOTP(Request $request)
+    {
+        $response = $this->authRepository->requestOTP($request);
+
+        return $response;
+    }
+
+    public function verifyOTP(Request $request){
+
+        return $this->authRepository->verifyOTP($request);
     }
 }

@@ -35,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post("/book", [BookingController::class, "create"]);
 
+Route::post('request_otp', [AuthController::class, "requestOTP"]);
+Route::post('verify_otp', [AuthController::class, "verifyOTP"]);
+
 // i) name of visitee(someone who is visited you)
 // ii) Destination
 // iii)purpose
@@ -65,7 +68,6 @@ Route::post("/book", [BookingController::class, "create"]);
 
 
 //TO DO
-// Profile
-// verify email on registration notification
+// verify email on registration notification with the 4 digits for email verification
 // forgot password
 // book CRUD
