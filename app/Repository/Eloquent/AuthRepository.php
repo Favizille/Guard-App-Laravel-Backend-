@@ -51,15 +51,18 @@ class AuthRepository extends BaseRepository{
         return [
             "status" => $this->isSuccessful(),
             "user" => auth()->user(),
-            'token' => auth()->user()->createToken('myapptoken')->plainTextToken,
+            'token' => $this->user->createToken('myapptoken')->plainTextToken,
         ];
     }
 
-    public function requestOTP($data){
+
+    public function sendOTP($data){
         $otp = rand(1000, 9999);
         Log::info("otp = ".$otp);
 
-        $user = $this->user->where('email', '=', $data->email)->update(['otp' => $otp]);
+        $user = $this->user->where('email', '=', $data->email)->first();
+        $user->update(["otp" => $otp]);
+        // $user = $this->user->where('id', '=', $data->id)->update(['otp' => $otp]);
 
         if($user){
 
@@ -68,9 +71,9 @@ class AuthRepository extends BaseRepository{
                 'body' => 'Your OTP is : ' .$otp
             ];
 
-            var_dump($data->email);
+            // var_dump($user->toArray());
 
-            Mail::to($data->email->send(new EmailNotification($message)));
+            Mail::to($user->notify(new EmailNotification($message)));
 
             return [
                 "status" => $this->isSuccessful(),
@@ -88,7 +91,7 @@ class AuthRepository extends BaseRepository{
         if($user){
             auth()->login($user, true);
             User::where('email','=',$data['email'])->update(['otp' => null]);
-            $accessToken = auth()->user()->createToken('authToken')->accessToken;
+            $accessToken = $user->createToken('authToken')->accessToken;
 
             return ["status" => $this->isSuccessful(),
             "message" => "Success",
