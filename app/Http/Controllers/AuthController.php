@@ -46,9 +46,9 @@ class AuthController extends Controller
        ];
     }
 
-    public function requestOTP(Request $request)
+    public function sendOTP(Request $request)
     {
-        $response = $this->authRepository->requestOTP($request);
+        $response = $this->authRepository->sendOTP($request);
 
         return $response;
     }

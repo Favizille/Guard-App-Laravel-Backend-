@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post("/book", [BookingController::class, "create"]);
 
-Route::post('request_otp', [AuthController::class, "requestOTP"]);
+Route::post('request_otp', [AuthController::class, "sendOTP"]);
 Route::post('verify_otp', [AuthController::class, "verifyOTP"]);
 
 // i) name of visitee(someone who is visited you)
