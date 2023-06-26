@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Repository\Eloquent\AuthRepository;
 
 class AuthController extends Controller
@@ -46,15 +47,23 @@ class AuthController extends Controller
        ];
     }
 
-    public function sendOTP(Request $request)
-    {
-        $response = $this->authRepository->sendOTP($request);
+    public function sendOTP(Request $request){
 
-        return $response;
+        return $this->authRepository->sendOTP($request);
     }
 
     public function verifyOTP(Request $request){
 
         return $this->authRepository->verifyOTP($request);
+    }
+
+    public function forgetPassword(Request $request){
+
+        return $this->authRepository->forgetPassword($request);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request){
+
+        return $this->authRepository->resetPassword($request->validated());
     }
 }

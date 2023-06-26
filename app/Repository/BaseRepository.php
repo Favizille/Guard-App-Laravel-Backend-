@@ -18,4 +18,10 @@ class BaseRepository{
             "message" => "failed",
         ];
     }
+
+    public function unauthorizedUser($user){
+        if(!$user){
+            return "Unauthorized User";
+        }
+    }
 }
