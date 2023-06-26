@@ -24,19 +24,20 @@ use Illuminate\Support\Facades\Route;
 Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"]);
+Route::post('request_otp', [AuthController::class, "sendOTP"]);
+Route::post('/verify_otp', [AuthController::class, "verifyOTP"]);
+Route::post('/forgot-password', [AuthController::class, "forgetPassword"]);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post("/createProfile", [UserController::class, "createProfile"]);
-    Route::put("/updateProfile", [UserController::class, "updateProfile"]);
+    Route::post("/create-profile", [UserController::class, "createProfile"]);
+    Route::put("/update-profile", [UserController::class, "updateProfile"]);
     Route::get("/profile", [UserController::class, "getProfile"]);
 });
 
-// Route::put("/updateProfile", [UserController::class, "updateProfile"]);
 
 Route::post("/book", [BookingController::class, "create"]);
 
-Route::post('request_otp', [AuthController::class, "sendOTP"]);
-Route::post('verify_otp', [AuthController::class, "verifyOTP"]);
 
 // i) name of visitee(someone who is visited you)
 // ii) Destination
@@ -68,6 +69,6 @@ Route::post('verify_otp', [AuthController::class, "verifyOTP"]);
 
 
 //TO DO
-// verify email on registration notification with the 4 digits for email verification
-// forgot password
+// verify email on registration notification with the 4 digits for email verification DONE
+// forgot password DONE
 // book CRUD

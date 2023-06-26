@@ -7,6 +7,7 @@ use App\Repository\BaseRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\EmailNotification;
+use App\Notifications\ResetPassword;
 
 class AuthRepository extends BaseRepository{
 
@@ -46,12 +47,13 @@ class AuthRepository extends BaseRepository{
             ];
         }
 
-        auth()->login($this->user->where("email", $request['email'])->first());
+        $user = $this->user->where("email", $request['email'])->first();
+        auth()->login($user);
 
         return [
             "status" => $this->isSuccessful(),
-            "user" => auth()->user(),
-            'token' => $this->user->createToken('myapptoken')->plainTextToken,
+            "user" => $user,
+            'token' => $user->createToken('myapptoken')->plainTextToken,
         ];
     }
 
@@ -62,35 +64,32 @@ class AuthRepository extends BaseRepository{
 
         $user = $this->user->where('email', '=', $data->email)->first();
         $user->update(["otp" => $otp]);
-        // $user = $this->user->where('id', '=', $data->id)->update(['otp' => $otp]);
 
-        if($user){
+        $this->unauthorizedUser($user);
 
-            $message = [
-                'subject' => 'Testing Application OTP',
-                'body' => 'Your OTP is : ' .$otp
-            ];
+        $message = [
+            'subject' => 'Your GuardApp Account OTP',
+            'body' => 'Your OTP is : ' .$otp
+        ];
 
-            // var_dump($user->toArray());
+        Mail::to($user->notify(new EmailNotification($message)));
 
-            Mail::to($user->notify(new EmailNotification($message)));
+        return [
+            "status" => $this->isSuccessful(),
+            "message" => "OTP sent"
+        ];
 
-            return [
-                "status" => $this->isSuccessful(),
-                "message" => "OTP sent"
-            ];
-        }
-
-        return $this->isUnsuccessful();
     }
 
     public function verifyOTP($data){
 
         $user = $this->user->where([['email', '=', $data['email']], ['otp', '=', $data['otp']]])->first();
 
+        $this->unauthorizedUser($user);
+
         if($user){
             auth()->login($user, true);
-            User::where('email','=',$data['email'])->update(['otp' => null]);
+            $this->user->where('email','=',$data['email'])->update(['otp' => null]);
             $accessToken = $user->createToken('authToken')->accessToken;
 
             return ["status" => $this->isSuccessful(),
@@ -101,6 +100,48 @@ class AuthRepository extends BaseRepository{
         }
 
         return $this->failResponse();
+    }
+
+    public function forgetPassword($data)
+    {
+        $user = $this->user->where('email', $data['email'])->first();
+
+        $message = [
+            "subject" => "Forgotten Your Password?",
+            "body" =>"No worries, click the link below to reset your password",
+            "url"=>" ", //put a get route to a view to reset password
+        ];
+
+        Mail::to($user->notify(new ResetPassword($message)));
+
+        return $this->isSuccessful();
+
+    }
+
+    public function resetPassword($data)
+    {
+        $user = $this->user->where('email', $data['email'])->update([
+            "password" => bcrypt($data["password"])
+        ]);
+
+        if(!$user)
+        {
+            return $this->failResponse();
+        }
+
+        return [
+            "status" => $this->isSuccessful(),
+            "message" => "Reset Password Done"
+        ];
+
+        $message = [
+            "subject" => "Reset Password",
+            "body" => "Password Reset was Successful"
+        ];
+
+        Mail::to($user->notify(new EmailNotification($message)));
+
+
     }
 
 }
