@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bookings', function (Blueprint $table) {
+        Schema::create('guards', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("user_id");
             $table->string("visitee");
             $table->string("destination");
             $table->string("purpose");
             $table->string("phone_number");
-            $table->string("duration");
-            $table->string("guardian");
-            $table->string("answer")->nullable();
+            $table->string("start_date");
+            $table->string("start_time");
+            $table->string("end_date");
+            $table->string("end_time");
             $table->timestamps();
         });
     }
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('guards');
     }
 };

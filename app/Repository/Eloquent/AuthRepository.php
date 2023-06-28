@@ -58,21 +58,24 @@ class AuthRepository extends BaseRepository{
     }
 
 
-    public function sendOTP($data){
+    public function sendOTP(object $data):array
+    {
         $otp = rand(1000, 9999);
         Log::info("otp = ".$otp);
 
         $user = $this->user->where('email', '=', $data->email)->first();
-        $user->update(["otp" => $otp]);
 
-        $this->unauthorizedUser($user);
+        if(! $user->update(["otp" => $otp])){
+            return [
+                "status" => false,
+                "message" => "OTP has not been sent",
+            ];
+        }
 
-        $message = [
+        $user->notify(new EmailNotification([
             'subject' => 'Your GuardApp Account OTP',
             'body' => 'Your OTP is : ' .$otp
-        ];
-
-        Mail::to($user->notify(new EmailNotification($message)));
+        ]));
 
         return [
             "status" => $this->isSuccessful(),
@@ -81,25 +84,30 @@ class AuthRepository extends BaseRepository{
 
     }
 
-    public function verifyOTP($data){
+    public function verifyOTP(object $data):array
+    {
 
         $user = $this->user->where([['email', '=', $data['email']], ['otp', '=', $data['otp']]])->first();
 
-        $this->unauthorizedUser($user);
+        if(!$user){
 
-        if($user){
-            auth()->login($user, true);
-            $this->user->where('email','=',$data['email'])->update(['otp' => null]);
-            $accessToken = $user->createToken('authToken')->accessToken;
-
-            return ["status" => $this->isSuccessful(),
-            "message" => "Success",
-            'user' => auth()->user(),
-            'access_token' => $accessToken
+            return [
+                "status" => "fail" ,
+                "message" => [ 1 => "Wrong OTP", 2 => "Invalid Email"]
             ];
         }
 
-        return $this->failResponse();
+        auth()->login($user, true);
+        $this->user->where('email','=',$data['email'])->update(['otp' => null]);
+        $accessToken = $user->createToken('authToken')->accessToken;
+
+        return [
+            "status" => $this->isSuccessful(),
+            "message" => "Success",
+            'user' => auth()->user(),
+            'access_token' => $accessToken
+        ];
+
     }
 
     public function forgetPassword($data)
