@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GuardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::post("/register", [AuthController::class, "register"]);
 Route::post("/login", [AuthController::class, "login"]);
 Route::post("/logout", [AuthController::class, "logout"]);
-Route::post('request_otp', [AuthController::class, "sendOTP"]);
-Route::post('/verify_otp', [AuthController::class, "verifyOTP"]);
+Route::post('request-otp', [AuthController::class, "sendOTP"]);
+Route::post('/verify-otp', [AuthController::class, "verifyOTP"]);
 Route::post('/forgot-password', [AuthController::class, "forgetPassword"]);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
@@ -36,7 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-Route::post("/book", [BookingController::class, "create"]);
+Route::middleware('auth:sanctum')->group( function(){
+
+    Route::post("/create-guard", [GuardController::class, "create"]);
+    Route::put('/update-guard/{guardId}', [GuardController::class, 'update']);
+    Route::get('/guard/{id}', [GuardController::class, 'get']);
+    Route::get('/guards', [GuardController::class, 'getAll']);
+    Route::get('/userguards', [GuardController::class, 'userGuards']);
+});
 
 
 // i) name of visitee(someone who is visited you)
@@ -72,3 +79,6 @@ Route::post("/book", [BookingController::class, "create"]);
 // verify email on registration notification with the 4 digits for email verification DONE
 // forgot password DONE
 // book CRUD
+//update guard
+//get all guards for a specific user
+// add image to profile
