@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\GuardRequest;
 use App\Repository\Eloquent\GuardRepository;
-use Illuminate\Http\Request;
 
 class GuardController extends Controller
 {
@@ -17,8 +17,22 @@ class GuardController extends Controller
         return $this->guardRepository->create($request->validated());
     }
 
-    public function update(int $guardId)
+    public function update($request, $guardId)
     {
-        return $this->guardRepository->update($guardId);
+        return $this->guardRepository->update($request, $guardId);
+    }
+
+    public function get($guardId)
+    {
+        return $this->guardRepository->get($guardId);
+    }
+
+    public function getAll()
+    {
+        return $this->guardRepository->getAll();
+    }
+
+    public function userGuards(){
+        return $this->guardRepository->userGuards();
     }
 }

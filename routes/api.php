@@ -40,6 +40,9 @@ Route::middleware('auth:sanctum')->group( function(){
 
     Route::post("/create-guard", [GuardController::class, "create"]);
     Route::put('/update-guard/{guardId}', [GuardController::class, 'update']);
+    Route::get('/guard/{id}', [GuardController::class, 'get']);
+    Route::get('/guards', [GuardController::class, 'getAll']);
+    Route::get('/userguards', [GuardController::class, 'userGuards']);
 });
 
 
@@ -76,4 +79,6 @@ Route::middleware('auth:sanctum')->group( function(){
 // verify email on registration notification with the 4 digits for email verification DONE
 // forgot password DONE
 // book CRUD
+//update guard
+//get all guards for a specific user
 // add image to profile
